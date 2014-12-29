@@ -1,7 +1,7 @@
-# SpagoBI 4.1 on Tomcat 6 with postgres
+# SpagoBI 5.0 on Tomcat 7 with postgres
 ##Status: Works, but requires manual DB setup
 
-This is SpaboBi 4.1 running in Tomcat6 with configs updated for PostgreSQL DB
+This is SpaboBi 5.0 running in Tomcat7 with configs updated for PostgreSQL DB
 
 Uncluded SpagoBI engines:
 
@@ -9,8 +9,32 @@ Uncluded SpagoBI engines:
  - SpagoBIConsoleEngine
  - SpagoBIMobileEngine
 
+###Postgres
+Il personnaly use a postgres containeR.
+This doc details how to launch spagobi with a postgres container
+DB need to be created manually
+
+Start a postgres container
+
+    docker run --name postgres -d --volumes-from odoodb -p 5432:5432 -p 2223:22 guilhem30/postgresql
+    
+Create spagobi user and db
+
+    createuser --no-createrole --no-superuser --pwprompt spagobi
+    createdb -O spagobi spagobi
+
+Get postgres script from your version
+
+    wget http://download.forge.ow2.org/spagobi/postgres-dbscript-5.0.0_15092014.zip
+
+Extract files and populate DB
+    
+    psql -U spagobi -h localhost spagobi < PG_create.sql
+    psql -U spagobi -h localhost spagobi < PG_create_quartz_schema.sql
+
 ###To start use:
-docker run -t -i -p 8080:8080 -e JAVA_OPTS="-Dcatalina.db.pass=**PASS** -Dcatalina.db.username=**USER** -Dcatalina.db.url=jbc:postgresql://IP:5432/**DATABASE**" abroweb/spagobi
+
+    docker run -d --name -p 8080:8080 --link <POSGRES container>: db -e JAVA_OPTS="-Dcatalina.db.pass=<DB PASS> -Dcatalina.db.username=<DB USER> -Dcatalina.db.url=jdbc:postgresql://db:5432/<DB NAME>" bretif/spagobi
 
 Please change **PASS, USER, IP, DATABASE** of your postgres database with installed SpagoBi schema: **postgres-dbscript-4.1.0_01122013.zip**
 
