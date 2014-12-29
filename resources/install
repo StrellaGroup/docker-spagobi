@@ -1,39 +1,23 @@
 #!/bin/bash
 
-
-unzip /SpagoBI-bin-4.1.0_01122013.zip -d /SpagoBI-bin
-unzip /SpagoBIBirtReportEngine-bin-4.1.0_01122013.zip -d /SpagoBIBirtReportEngine
-unzip /SpagoBIConsoleEngine-bin-4.1.0_01122013.zip -d /SpagoBIConsoleEngine
-unzip /SpagoBIMobileEngine-bin-4.1.0_01122013.zip -d /SpagoBIMobileEngine
-
-mv /SpagoBI-bin/SpagoBI.war /usr/share/tomcat/webapps/SpagoBI.war
-mv /SpagoBIBirtReportEngine/SpagoBIBirtReportEngine.war /usr/share/tomcat/webapps/SpagoBIBirtReportEngine.war
-mv /SpagoBIConsoleEngine/SpagoBIConsoleEngine.war /usr/share/tomcat/webapps/SpagoBIConsoleEngine.war
-mv /SpagoBIMobileEngine/SpagoBIMobileEngine.war /usr/share/tomcat/webapps/SpagoBIMobileEngine.war
-rm -Rf /SpagoBI*
-
-
-
-
+echo "***Start tomcat"
 /usr/share/tomcat/bin/startup.sh
 ps aux
-sleep 30
+echo "***Sleep 120s in order war to be installed"
+sleep 120
 ps aux
 
 ls /usr/share/tomcat/webapps/
 cd /usr/share/tomcat/webapps/SpagoBI
 
-find \( -iname "*.js" -o -iname "*.xml" -o -iname "*.jsp" \) | xargs sed -i 's/ISO-8859-15/UTF-8/g'
-find \( -iname "*.js" -o -iname "*.xml" -o -iname "*.jsp" \) | xargs sed -i 's/ISO-8859-1/UTF-8/g'
+echo "***Set js to UTF-8"
+find \( -iname "*.js" -o -iname "*.xml" -o -iname "*.jsp" \) -print0 | xargs -0 sed -i 's/ISO-8859-15/UTF-8/g'
+find \( -iname "*.js" -o -iname "*.xml" -o -iname "*.jsp" \) -print0 | xargs -0 sed -i 's/ISO-8859-1/UTF-8/g'
 
+echo "***Configure SpagoBI to use postgres"
 sed 's/MySQLDialect/PostgreSQLDialect/' -i /usr/share/tomcat/webapps/SpagoBI/WEB-INF/classes/hibernate.cfg.xml
 sed 's/MySQLDialect/PostgreSQLDialect/' -i /usr/share/tomcat/webapps/SpagoBI/WEB-INF/classes/jbpm.hibernate.cfg.xml
 
 sed 's/StdJDBCDelegate/PostgreSQLDelegate/' -i /usr/share/tomcat/webapps/SpagoBI/WEB-INF/classes/quartz.properties
-
-rm /usr/share/tomcat/webapps/SpagoBI.war
-rm /usr/share/tomcat/webapps/SpagoBIBirtReportEngine.war
-rm /usr/share/tomcat/webapps/SpagoBIConsoleEngine.war
-rm /usr/share/tomcat/webapps/SpagoBIMobileEngine.war
 
 exit 0
