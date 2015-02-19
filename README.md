@@ -16,7 +16,7 @@ DB need to be created manually
 
 Start a postgres container
 
-    docker run --name postgres -d --volumes-from odoodb -p 5432:5432 -p 2223:22 guilhem30/postgresql
+    docker run --name postgres -d -p 5432:5432 -p 2223:22 guilhem30/postgresql
     
 Create spagobi user and db
 
