@@ -1,7 +1,7 @@
-# SpagoBI 5.0 on Tomcat 7 with postgres
+# SpagoBI 5.1 on Tomcat 7 with postgres
 ##Status: Works, but requires manual DB setup
 
-This is SpaboBi 5.0 running in Tomcat7 with configs updated for PostgreSQL DB
+This is SpaboBi 5.1 running in Tomcat7 with configs updated for PostgreSQL DB
 
 Uncluded SpagoBI engines:
 
