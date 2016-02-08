@@ -1,9 +1,9 @@
-FROM dockerfile/java
+FROM java:7
 
 MAINTAINER bertrand@sudokeys.com
 
 ENV TOMCAT_VERSION 7.0.57
-ENV SPAGOBI_VERSION 5.0.0_15092014
+ENV SPAGOBI_VERSION 5.1.0_19012015
 RUN mkdir -p /usr/share/tomcat
 RUN wget --no-verbose -O /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz \
     http://archive.apache.org/dist/tomcat/tomcat-7/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
@@ -71,7 +71,7 @@ ADD ./resources/conf/server.xml /usr/share/tomcat/conf/server.xml
 ADD http://jdbc.postgresql.org/download/postgresql-9.3-1102.jdbc41.jar /usr/share/tomcat/lib/postgresql-9.3-1102.jdbc41.jar
 
 ADD ./resources/install /root/install
-RUN chmod 755 /root/install && /root/install
+RUN chmod 755 /root/install && sync && /root/install
 
 #ADD ./resources/conf/SpagoBI/web.xml /usr/share/tomcat/webapps/SpagoBI/WEB-INF/web.xml
 #ADD ./resources/conf/SpagoBIBirtReportEngine/web.xml /usr/share/tomcat/webapps/SpagoBIBirtReportEngine/WEB-INF/web.xml

@@ -1,7 +1,7 @@
-# SpagoBI 5.0 on Tomcat 7 with postgres
+# SpagoBI 5.1 on Tomcat 7 with postgres
 ##Status: Works, but requires manual DB setup
 
-This is SpaboBi 5.0 running in Tomcat7 with configs updated for PostgreSQL DB
+This is SpaboBi 5.1 running in Tomcat7 with configs updated for PostgreSQL DB
 
 Uncluded SpagoBI engines:
 
@@ -25,7 +25,7 @@ Create spagobi user and db
 
 Get postgres script from your version
 
-    wget http://download.forge.ow2.org/spagobi/postgres-dbscript-5.0.0_15092014.zip
+    wget http://download.forge.ow2.org/spagobi/postgres-dbscript-5.1.0_19012015.zip
 
 Extract files and populate DB
     
@@ -34,9 +34,9 @@ Extract files and populate DB
 
 ###To start use:
 
-    docker run -d --name -p 8080:8080 --link <POSGRES container>: db -e JAVA_OPTS="-Dcatalina.db.pass=<DB PASS> -Dcatalina.db.username=<DB USER> -Dcatalina.db.url=jdbc:postgresql://db:5432/<DB NAME>" bretif/spagobi
+    docker run -d --name <spagobi container> -p 8080:8080 --link <POSGRES container>: db -e JAVA_OPTS="-Dcatalina.db.pass=<DB PASS> -Dcatalina.db.username=<DB USER> -Dcatalina.db.url=jdbc:postgresql://db:5432/<DB NAME>" bretif/spagobi
 
-Please change **PASS, USER, IP, DATABASE** of your postgres database with installed SpagoBi schema: **postgres-dbscript-4.1.0_01122013.zip**
+Please change **PASS, USER, IP, DATABASE** of your postgres database with installed SpagoBi schema!
 
 Example:
 
