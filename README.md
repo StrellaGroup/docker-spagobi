@@ -1,46 +1,31 @@
-# SpagoBI 5.1 on Tomcat 7 with postgres
-##Status: Works, but requires manual DB setup
+# SpagoBI 5.2 on Tomcat 7 with MySQL
 
-This is SpaboBi 5.1 running in Tomcat7 with configs updated for PostgreSQL DB
+This is SpaboBI 5.2 running in Tomcat7 with configs updated for MySQL.
 
-Uncluded SpagoBI engines:
+Included SpagoBI engines:
 
  - SpagoBIBirtReportEngine
  - SpagoBIConsoleEngine
  - SpagoBIMobileEngine
 
-###Postgres
-Il personnaly use a postgres containeR.
-This doc details how to launch spagobi with a postgres container
-DB need to be created manually
+### Usage:
 
-Start a postgres container
+```bash
+# Start MySQL container.
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=<DB_PASS> \
+    -e MYSQL_DATABASE=<DB_NAME> -d \
+    -v $CURRENT_DIR/db:/db mysql/mysql-server:5.6
 
-    docker run --name postgres -d -p 5432:5432 -p 2223:22 guilhem30/postgresql
-    
-Create spagobi user and db
+# Install SpagoBI DB scripts.
+docker exec -it mysql bash /db/setup.sh
 
-    createuser --no-createrole --no-superuser --pwprompt spagobi
-    createdb -O spagobi spagobi
+# Start SpagoBI container.
+docker run -id --name spagobi -p 8080:8080 --link mysql:db \
+    -e JAVA_OPTS="-Dcatalina.db.pass=<DB_PASS> -Dcatalina.db.username=root -Dcatalina.db.url=jdbc:mysql://<DB_NAME>/spagobi" spagobi
+```
 
-Get postgres script from your version
+Or run `bash run.sh`.
 
-    wget http://download.forge.ow2.org/spagobi/postgres-dbscript-5.1.0_19012015.zip
+The database image is from [mysql/mysql-docker](https://github.com/mysql/mysql-docker), so you might want to take a look at that if you want to tweak the MySQL user and password. The commands above assume the default user `root` is being used.
 
-Extract files and populate DB
-    
-    psql -U spagobi -h localhost spagobi < PG_create.sql
-    psql -U spagobi -h localhost spagobi < PG_create_quartz_schema.sql
-
-###To start use:
-
-    docker run -d --name <spagobi container> -p 8080:8080 --link <POSGRES container>: db -e JAVA_OPTS="-Dcatalina.db.pass=<DB PASS> -Dcatalina.db.username=<DB USER> -Dcatalina.db.url=jdbc:postgresql://db:5432/<DB NAME>" bretif/spagobi
-
-Please change **PASS, USER, IP, DATABASE** of your postgres database with installed SpagoBi schema!
-
-Example:
-
- - psql SpagoBI < PG_create.sql
- - psql SpagoBI < PG_create_quartz_schema.sql
-
-TODO: Compile SpagobiFilter.jar on build AND DB setup
+`run.sh` has defaults that you might want to change before running.

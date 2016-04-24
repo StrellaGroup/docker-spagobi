@@ -14,10 +14,4 @@ echo "***Set js to UTF-8"
 find \( -iname "*.js" -o -iname "*.xml" -o -iname "*.jsp" \) -print0 | xargs -0 sed -i 's/ISO-8859-15/UTF-8/g'
 find \( -iname "*.js" -o -iname "*.xml" -o -iname "*.jsp" \) -print0 | xargs -0 sed -i 's/ISO-8859-1/UTF-8/g'
 
-echo "***Configure SpagoBI to use postgres"
-sed 's/MySQLDialect/PostgreSQLDialect/' -i /usr/share/tomcat/webapps/SpagoBI/WEB-INF/classes/hibernate.cfg.xml
-sed 's/MySQLDialect/PostgreSQLDialect/' -i /usr/share/tomcat/webapps/SpagoBI/WEB-INF/classes/jbpm.hibernate.cfg.xml
-
-sed 's/StdJDBCDelegate/PostgreSQLDelegate/' -i /usr/share/tomcat/webapps/SpagoBI/WEB-INF/classes/quartz.properties
-
 exit 0

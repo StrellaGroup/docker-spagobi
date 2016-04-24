@@ -1,9 +1,9 @@
 FROM java:7
 
-MAINTAINER bertrand@sudokeys.com
+MAINTAINER engineering@strellagroup.com
 
 ENV TOMCAT_VERSION 7.0.57
-ENV SPAGOBI_VERSION 5.1.0_19012015
+ENV SPAGOBI_VERSION 5.20_08042016
 RUN mkdir -p /usr/share/tomcat
 RUN wget --no-verbose -O /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz \
     http://archive.apache.org/dist/tomcat/tomcat-7/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
@@ -68,7 +68,9 @@ RUN wget --no-verbose http://download.forge.ow2.org/spagobi/SpagoBITalendEngine-
 
 ADD ./resources/conf/server.xml /usr/share/tomcat/conf/server.xml
 
-ADD http://jdbc.postgresql.org/download/postgresql-9.3-1102.jdbc41.jar /usr/share/tomcat/lib/postgresql-9.3-1102.jdbc41.jar
+RUN wget -q --no-cookies --no-check-certificate "http://www.java2s.com/Code/JarDownload/mysql/mysql-connector-java-5.1.23-bin.jar.zip" -O /usr/share/tomcat/lib/mysql-connector-java-5.1.23-bin.jar.zip
+RUN unzip /usr/share/tomcat/lib/mysql-connector-java-5.1.23-bin.jar.zip -d /usr/share/tomcat/lib && \
+    rm /usr/share/tomcat/lib/mysql-connector-java-5.1.23-bin.jar.zip
 
 ADD ./resources/install /root/install
 RUN chmod 755 /root/install && sync && /root/install
